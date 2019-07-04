@@ -7,8 +7,8 @@ Adds compatibility to symbiote/silverstripe-advanced-workflow for tractorcow/sil
 
 ## Requirements
 * SilverStripe CMS 4.0+
-* tractorcow/silverstripe-fluent 4.2.x-dev
-* symbiote/silverstripe-advancedworkflow 5.2
+* tractorcow/silverstripe-fluent ~4.2
+* symbiote/silverstripe-advancedworkflow ~5.2
 
 ## Installation
 ```

@@ -17,8 +17,8 @@
     ],
     "require": {
         "silverstripe/framework": "^4.0",
-        "tractorcow/silverstripe-fluent": "4.2.x-dev",
-        "symbiote/silverstripe-advancedworkflow": "5.2"
+        "tractorcow/silverstripe-fluent": "~4.2",
+        "symbiote/silverstripe-advancedworkflow": "~5.2"
     },
     "autoload": {
         "psr-4": {
