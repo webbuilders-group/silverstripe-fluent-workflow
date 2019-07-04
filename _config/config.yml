@@ -2,13 +2,27 @@
 Name: fluentworkflow
 After:
   - 'mysite'
+  - 'fluent*'
+  - 'workflow*'
 ---
 SilverStripe\Core\Injector\Injector:
-    Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance:
-        class: WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance
-    Symbiote\AdvancedWorkflow\Services\WorkflowService:
-        class: WebbuildersGroup\FluentWorkflow\Services\FluentWorkflowService
+  # Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance:
+  #   class: WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance
+  Symbiote\AdvancedWorkflow\Services\WorkflowService:
+    class: WebbuildersGroup\FluentWorkflow\Services\FluentWorkflowService
+  Symbiote\QueuedJobs\Services\QueuedJobService:
+    class: WebbuildersGroup\FluentWorkflow\Services\FluentQueuedJobService
 
 WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance:
-    extensions: 
-      - WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowInstanceExtension
+  extensions: 
+    - WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowInstanceExtension
+
+Page:
+  field_include:
+    - 'DesiredPublishDate'
+    - 'DesiredUnPublishDate'
+    - 'PublishOnDate'
+    - 'UnPublishOnDate'
+    - 'AllowEmbargoedEditing'
+    - 'PublishJobID'
+    - 'UnPublishJobID'
