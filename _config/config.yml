@@ -1,7 +1,6 @@
 ---
 Name: fluentworkflow
 After:
-  - 'mysite'
   - 'fluent*'
   - 'workflow*'
 ---
