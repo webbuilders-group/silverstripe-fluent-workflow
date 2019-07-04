@@ -1,14 +1,28 @@
-# SilverStripe-Fluent-Workflow
+Fluent Workflow
+=================
+Adds compatibility to symbiote/silverstripe-advanced-workflow for tractorcow/silverstripe-fluent
 
 ## Maintainer Contact
-
-RobertLeCreux (Nickname: RobertLeCreux) <robert.lc (at) webbuildersgroup (dot) com>
+* Robert LeCreux ([RobertLeCreux](https://github.com/RobertLeCreux))
 
 ## Requirements
+* SilverStripe CMS 4.0+
+* tractorcow/silverstripe-fluent 4.2.x-dev
+* symbiote/silverstripe-advancedworkflow 5.2
 
- * SilverStripe 4+
- * Advanced Workflow
- * Fluent
+## Installation
+```
+composer require webbuilders-group/silverstripe-fluent-workflow
+```
 
 
-## Installation & Documentation
+## Usage
+Embargos and Workflow Instances will be created uniquely per locale on a page.
+
+Use the following extension
+
+```yml
+Page:
+    extensions:
+        - WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowEmbargoExpiryExtension
+```
