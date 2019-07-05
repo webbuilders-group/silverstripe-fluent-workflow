@@ -10,11 +10,16 @@ use TractorCow\Fluent\State\FluentState;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowDefinition;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowActionInstance;
+use WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowInstanceExtension;
 
 class FluentWorkflowInstance extends WorkflowInstance
 {
 
     private static $table_name = "FluentWorkflowInstance";
+
+    private static $extensions = [
+        FluentWorkflowInstanceExtension::class,
+    ];
 
     public function getTarget($getLive = false)
     {
