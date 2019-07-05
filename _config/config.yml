@@ -7,6 +7,8 @@ After:
 SilverStripe\Core\Injector\Injector:
   Symbiote\AdvancedWorkflow\Services\WorkflowService:
     class: WebbuildersGroup\FluentWorkflow\Services\FluentWorkflowService
+  Symbiote\AdvancedWorkflow\Extensions\WorkflowApplicable:
+    class: WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowApplicable
   Symbiote\QueuedJobs\Services\QueuedJobService:
     class: WebbuildersGroup\FluentWorkflow\Services\FluentQueuedJobService
 
