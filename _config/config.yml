@@ -1,8 +1,8 @@
 ---
 Name: fluentworkflow
 After:
-  - 'fluent*'
-  - 'workflow*'
+  - '#fluent*'
+  - '#workflowconfig'
 ---
 SilverStripe\Core\Injector\Injector:
   Symbiote\AdvancedWorkflow\Services\WorkflowService:

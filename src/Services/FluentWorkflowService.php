@@ -10,6 +10,7 @@ use TractorCow\Fluent\State\FluentState;
 use Symbiote\AdvancedWorkflow\Services\WorkflowService;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance;
 use Symbiote\AdvancedWorkflow\Extensions\WorkflowApplicable;
+use Symbiote\AdvancedWorkflow\DataObjects\WorkflowDefinition;
 use Symbiote\AdvancedWorkflow\Extensions\FileWorkflowApplicable;
 use Symbiote\AdvancedWorkflow\Services\ExistingWorkflowException;
 use WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance;
@@ -84,5 +85,38 @@ class FluentWorkflowService extends WorkflowService
 
             return $do;
         }
+    }
+
+    /**
+     * Gets the workflow definition for a given dataobject, if there is one
+     *
+     * Will recursively query parent elements until it finds one, if available
+     *
+     * @param DataObject $dataObject
+     */
+    public function getDefinitionFor(DataObject $dataObject)
+    {
+        if (
+            $dataObject->hasExtension(WorkflowApplicable::class)
+            || $dataObject->hasExtension(FileWorkflowApplicable::class)
+        ) {
+            $definitionID = Locale::getCurrentLocale()->Locale === "en_US" ? $dataObject->WorkFlowDefinitionID : $dataObject->FrWorkflowDefinitionID;
+            if ($definitionID) {
+                return DataObject::get_by_id(WorkflowDefinition::class, $definitionID);
+            }
+            if ($dataObject->hasMethod('useInheritedWorkflow') && !$dataObject->useInheritedWorkflow()) {
+                return null;
+            }
+            if ($dataObject->ParentID) {
+                return $this->getDefinitionFor($dataObject->Parent());
+            }
+            if ($dataObject->hasMethod('workflowParent')) {
+                $obj = $dataObject->workflowParent();
+                if ($obj) {
+                    return $this->getDefinitionFor($obj);
+                }
+            }
+        }
+        return null;
     }
 }

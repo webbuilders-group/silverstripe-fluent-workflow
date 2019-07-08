@@ -15,10 +15,21 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_Base;
 use Symbiote\AdvancedWorkflow\Extensions\WorkflowApplicable;
+use Symbiote\AdvancedWorkflow\DataObjects\WorkflowDefinition;
 use WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance;
 
 class FluentWorkflowApplicable extends WorkflowApplicable
 {
+    private static $has_one = [
+        'WorkflowDefinition' => WorkflowDefinition::class,
+        'FrWorkflowDefinition' => WorkflowDefinition::class,
+    ];
+
+    private static $many_many = [
+        "AdditionalWorkflowDefinitions" => WorkflowDefinition::class,
+        "FrAdditionalWorkflowDefinitions" => WorkflowDefinition::class,
+    ];
+
     public function updateFields(FieldList $fields)
     {
         if (!$this->owner->ID) {
@@ -28,8 +39,10 @@ class FluentWorkflowApplicable extends WorkflowApplicable
         $tab = $fields->fieldByName('Root') ? $fields->findOrMakeTab('Root.Workflow') : $fields;
 
         if (Permission::check('APPLY_WORKFLOW')) {
+            $fields->removeByName('WorkflowDefinitionID');
+            $fields->removeByName('FrWorkflowDefinitionID');
             $definition = new DropdownField(
-                'WorkflowDefinitionID',
+                Locale::getCurrentLocale()->Locale === "en_US" ? 'WorkflowDefinitionID' : 'FrWorkflowDefinitionID',
                 _t('WorkflowApplicable.DEFINITION', 'Applied Workflow')
             );
             $definitions = $this->getWorkflowService()->getDefinitions()->map()->toArray();
@@ -37,13 +50,15 @@ class FluentWorkflowApplicable extends WorkflowApplicable
             $definition->setEmptyString(_t('WorkflowApplicable.INHERIT', 'Inherit from parent'));
             $tab->push($definition);
 
+
             // Allow an optional selection of additional workflow definitions.
 
             if ($this->owner->WorkflowDefinitionID) {
                 $fields->removeByName('AdditionalWorkflowDefinitions');
+                $fields->removeByName('FrAdditionalWorkflowDefinitions');
                 unset($definitions[$this->owner->WorkflowDefinitionID]);
                 $tab->push($additional = ListboxField::create(
-                    'AdditionalWorkflowDefinitions',
+                    Locale::getCurrentLocale()->Locale === "en_US" ? 'AdditionalWorkflowDefinitions' : 'FrAdditionalWorkflowDefinitions',
                     _t('WorkflowApplicable.ADDITIONAL_WORKFLOW_DEFINITIONS', 'Additional Workflows')
                 ));
                 $additional->setSource($definitions);

@@ -16,7 +16,7 @@ class FluentQueuedJobService extends QueuedJobService
 {
     public function queueJob(QueuedJob $job, $startAfter = null, $userId = null, $queueName = null)
     {
-        $job->__set('locale', Locale::getCurrentLocale());
+        $job->__set('Locale', Locale::getCurrentLocale());
         return parent::queueJob($job, $startAfter, $userId, $queueName);
     }
 
@@ -31,7 +31,7 @@ class FluentQueuedJobService extends QueuedJobService
             throw new Exception("$jobId is invalid");
         }
         return FluentState::singleton()->withState(function ($state) use ($jobDescriptor) {
-            $state->setLocale(unserialize($jobDescriptor->SavedJobData)->locale->Locale);
+            $state->setLocale(unserialize($jobDescriptor->SavedJobData)->Locale->Locale);
             return parent::runJob($jobDescriptor->ID);
         });
     }
