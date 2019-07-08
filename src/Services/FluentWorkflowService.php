@@ -14,6 +14,7 @@ use Symbiote\AdvancedWorkflow\DataObjects\WorkflowDefinition;
 use Symbiote\AdvancedWorkflow\Extensions\FileWorkflowApplicable;
 use Symbiote\AdvancedWorkflow\Services\ExistingWorkflowException;
 use WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance;
+use WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowApplicable;
 
 class FluentWorkflowService extends WorkflowService
 {
@@ -69,7 +70,7 @@ class FluentWorkflowService extends WorkflowService
             $id = $item->WorkflowID;
             return DataObject::get_by_id(WorkflowInstance::class, $id);
         } elseif (
-            is_object($item) && ($item->hasExtension(WorkflowApplicable::class)
+            is_object($item) && ($item->hasExtension(FluentWorkflowApplicable::class)
                 || $item->hasExtension(FileWorkflowApplicable::class))
         ) {
             $filter = sprintf(

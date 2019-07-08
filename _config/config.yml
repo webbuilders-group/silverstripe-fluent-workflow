@@ -12,6 +12,10 @@ SilverStripe\Core\Injector\Injector:
   Symbiote\QueuedJobs\Services\QueuedJobService:
     class: WebbuildersGroup\FluentWorkflow\Services\FluentQueuedJobService
 
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowApplicable
+
 Page:
   field_include:
     - 'DesiredPublishDate'
