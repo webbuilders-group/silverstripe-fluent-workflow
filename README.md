@@ -1,6 +1,6 @@
 Fluent Workflow
 =================
-Adds compatibility to symbiote/silverstripe-advanced-workflow for tractorcow/silverstripe-fluent
+Adds compatibility to symbiote/silverstripe-advancedworkflow for tractorcow/silverstripe-fluent
 
 ## Maintainer Contact
 * Robert LeCreux ([RobertLeCreux](https://github.com/RobertLeCreux))
