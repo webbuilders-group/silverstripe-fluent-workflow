@@ -100,7 +100,7 @@ class FluentWorkflowService extends WorkflowService
             $dataObject->hasExtension(WorkflowApplicable::class)
             || $dataObject->hasExtension(FileWorkflowApplicable::class)
         ) {
-            $definitionID = Locale::getCurrentLocale()->Locale === "en_US" ? $dataObject->WorkFlowDefinitionID : $dataObject->FrWorkflowDefinitionID;
+            $definitionID = Locale::getCurrentLocale()->Locale === "en_US" ? $dataObject->WorkflowDefinitionID : $dataObject->FrWorkflowDefinitionID;
             if ($definitionID) {
                 return DataObject::get_by_id(WorkflowDefinition::class, $definitionID);
             }
