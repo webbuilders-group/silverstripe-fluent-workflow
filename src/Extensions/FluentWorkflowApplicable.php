@@ -4,7 +4,6 @@ namespace WebbuildersGroup\FluentWorkflow\Extensions;
 
 use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\FieldList;
-use TractorCow\Fluent\Model\Locale;
 use SilverStripe\Forms\ListboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\ReadonlyField;
@@ -22,14 +21,22 @@ class FluentWorkflowApplicable extends WorkflowApplicable
 {
     private static $has_one = [
         'WorkflowDefinition' => WorkflowDefinition::class,
-        'FrWorkflowDefinition' => WorkflowDefinition::class,
     ];
 
     private static $many_many = [
         "AdditionalWorkflowDefinitions" => WorkflowDefinition::class,
-        "FrAdditionalWorkflowDefinitions" => WorkflowDefinition::class,
     ];
-
+    
+    private static $many_many_extraFields = [
+        'AdditionalWorkflowDefinitions' => [
+            'Locale' => 'Varchar(10)',
+        ],
+    ];
+    
+    private static $field_include = [
+        'WorkflowDefinitionID',
+    ];
+    
     public function updateFields(FieldList $fields)
     {
         if (!$this->owner->ID) {
@@ -40,11 +47,7 @@ class FluentWorkflowApplicable extends WorkflowApplicable
 
         if (Permission::check('APPLY_WORKFLOW')) {
             $fields->removeByName('WorkflowDefinitionID');
-            $fields->removeByName('FrWorkflowDefinitionID');
-            $definition = new DropdownField(
-                Locale::getCurrentLocale()->Locale === "en_US" ? 'WorkflowDefinitionID' : 'FrWorkflowDefinitionID',
-                _t('WorkflowApplicable.DEFINITION', 'Applied Workflow')
-            );
+            $definition = new DropdownField('WorkflowDefinitionID', _t('WorkflowApplicable.DEFINITION', 'Applied Workflow'));
             $definitions = $this->getWorkflowService()->getDefinitions()->map()->toArray();
             $definition->setSource($definitions);
             $definition->setEmptyString(_t('WorkflowApplicable.INHERIT', 'Inherit from parent'));
@@ -55,13 +58,8 @@ class FluentWorkflowApplicable extends WorkflowApplicable
 
             if ($this->owner->WorkflowDefinitionID) {
                 $fields->removeByName('AdditionalWorkflowDefinitions');
-                $fields->removeByName('FrAdditionalWorkflowDefinitions');
                 unset($definitions[$this->owner->WorkflowDefinitionID]);
-                $tab->push($additional = ListboxField::create(
-                    Locale::getCurrentLocale()->Locale === "en_US" ? 'AdditionalWorkflowDefinitions' : 'FrAdditionalWorkflowDefinitions',
-                    _t('WorkflowApplicable.ADDITIONAL_WORKFLOW_DEFINITIONS', 'Additional Workflows')
-                ));
-                $additional->setSource($definitions);
+                $tab->push($additional = ListboxField::create('AdditionalWorkflowDefinitions', _t('WorkflowApplicable.ADDITIONAL_WORKFLOW_DEFINITIONS', 'Additional Workflows'))->setSource($definitions));
             }
         }
 
@@ -83,7 +81,7 @@ class FluentWorkflowApplicable extends WorkflowApplicable
 
             $insts = FluentWorkflowInstance::get()->filter([
                 "TargetID" => $this->owner->ID,
-                "TargetLocale" => Locale::getCurrentLocale()->Locale,
+                "TargetLocale" => FluentState::singleton()->getLocale(),
             ]);
             $log = new GridField(
                 'WorkflowLog',
@@ -101,11 +99,7 @@ class FluentWorkflowApplicable extends WorkflowApplicable
         parent::onBeforeWrite();
         
         if (!$this->owner->existsInLocale()) {
-            if (Locale::getCurrentLocale()->Locale === "en_US") {
-                $this->owner->WorkflowDefinitionID = 0;
-            } else {
-                $this->owner->FrWorkflowDefinition = 0;
-            }
+            $this->owner->WorkflowDefinitionID = 0;
         }
     }
 }

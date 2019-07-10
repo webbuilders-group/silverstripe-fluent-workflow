@@ -17,12 +17,19 @@ composer require webbuilders-group/silverstripe-fluent-workflow
 
 
 ## Usage
-Embargos and Workflow Instances will be created uniquely per locale on a page.
+Embargos and Workflow Instances will be created uniquely per locale on a page. Note the data object you are assigning these classes to must have the `TractorCow\Fluent\Extension\FluentExtension` extension (or one of it's subclasses).
 
-Use the following extension
-
+For workflows use the following extension:
 ```yml
-Page:
+MyDataObject:
+    extensions:
+        - WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowApplicable
+```
+
+
+For embargo's use the following extension:
+```yml
+MyDataObject:
     extensions:
         - WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowEmbargoExpiryExtension
 ```

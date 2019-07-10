@@ -12,6 +12,8 @@ class FluentWorkflowEmbargoExpiryExtension extends WorkflowEmbargoExpiryExtensio
         'PublishOnDate',
         'UnPublishOnDate',
         'AllowEmbargoedEditing',
+        'PublishJobID',
+        'UnPublishJobID',
     ];
     
     public function onBeforeWrite()

@@ -5,7 +5,6 @@ namespace WebbuildersGroup\FluentWorkflow\Services;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
-use TractorCow\Fluent\Model\Locale;
 use TractorCow\Fluent\State\FluentState;
 use Symbiote\AdvancedWorkflow\Services\WorkflowService;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance;
@@ -62,7 +61,7 @@ class FluentWorkflowService extends WorkflowService
      */
     public function getWorkflowFor($item, $includeComplete = false)
     {
-        $locale = Locale::getCurrentLocale()->Locale;
+        $locale = FluentState::singleton()->getLocale();
 
         $id = $item;
 
@@ -101,7 +100,7 @@ class FluentWorkflowService extends WorkflowService
             $dataObject->hasExtension(WorkflowApplicable::class)
             || $dataObject->hasExtension(FileWorkflowApplicable::class)
         ) {
-            $definitionID = Locale::getCurrentLocale()->Locale === "en_US" ? $dataObject->WorkflowDefinitionID : $dataObject->FrWorkflowDefinitionID;
+            $definitionID = $dataObject->WorkflowDefinitionID;
             if ($definitionID) {
                 return DataObject::get_by_id(WorkflowDefinition::class, $definitionID);
             }
