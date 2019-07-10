@@ -1,5 +1,4 @@
 <?php
-
 namespace WebbuildersGroup\FluentWorkflow\Extensions;
 
 use Symbiote\AdvancedWorkflow\Extensions\WorkflowEmbargoExpiryExtension;

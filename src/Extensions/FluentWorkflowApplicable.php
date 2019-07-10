@@ -1,20 +1,23 @@
 <?php
-
 namespace WebbuildersGroup\FluentWorkflow\Extensions;
 
-use SilverStripe\Dev\Debug;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\ListboxField;
-use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\Security\Permission;
-use TractorCow\Fluent\State\FluentState;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_Base;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
-use SilverStripe\Forms\GridField\GridFieldConfig_Base;
-use Symbiote\AdvancedWorkflow\Extensions\WorkflowApplicable;
+use SilverStripe\ORM\ManyManyList;
+use SilverStripe\ORM\RelationList;
+use SilverStripe\Security\Permission;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowDefinition;
+use Symbiote\AdvancedWorkflow\Extensions\WorkflowApplicable;
+use TractorCow\Fluent\Extension\FluentFilteredExtension;
+use TractorCow\Fluent\Model\Locale;
+use TractorCow\Fluent\State\FluentState;
+use WebbuildersGroup\FluentWorkflow\DataLists\FluentWorkflowDefinitionList;
 use WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance;
 
 class FluentWorkflowApplicable extends WorkflowApplicable
@@ -29,7 +32,7 @@ class FluentWorkflowApplicable extends WorkflowApplicable
     
     private static $many_many_extraFields = [
         'AdditionalWorkflowDefinitions' => [
-            'Locale' => 'Varchar(10)',
+            'JunctionLocale' => 'Varchar(10)',
         ],
     ];
     
@@ -59,7 +62,7 @@ class FluentWorkflowApplicable extends WorkflowApplicable
             if ($this->owner->WorkflowDefinitionID) {
                 $fields->removeByName('AdditionalWorkflowDefinitions');
                 unset($definitions[$this->owner->WorkflowDefinitionID]);
-                $tab->push($additional = ListboxField::create('AdditionalWorkflowDefinitions', _t('WorkflowApplicable.ADDITIONAL_WORKFLOW_DEFINITIONS', 'Additional Workflows'))->setSource($definitions));
+                $tab->push(ListboxField::create('AdditionalWorkflowDefinitions', _t('WorkflowApplicable.ADDITIONAL_WORKFLOW_DEFINITIONS', 'Additional Workflows'))->setSource($definitions));
             }
         }
 
@@ -91,6 +94,21 @@ class FluentWorkflowApplicable extends WorkflowApplicable
             );
 
             $tab->push($log);
+        }
+    }
+    
+    /**
+     * Switches out the relationship list for the workflow definitions with FluentWorkflowDefinitionList
+     * @param ManyManyList $list
+     */
+    public function updateManyManyComponents(RelationList &$list)
+    {
+        //If we have a ManyManyList swap with a FluentManyManyList
+        if ($list instanceof ManyManyList && $list->dataClass() == WorkflowDefinition::class) {
+            $list = FluentWorkflowDefinitionList::create($list->dataClass(), $list->getJoinTable(), $list->getLocalKey(), $list->getForeignKey(), ($this->owner->existsInLocale($this->owner->Locale) ? $this->owner->Locale : $this->owner->getSourceLocale()->Locale), $list->getExtraFields())
+                                        ->forForeignID($list->getForeignID())
+                                        ->setDataQueryParam($list->dataQuery()->getQueryParams())
+                                        ->setLocaleFilterEnabled(($this->owner->existsInLocale($this->owner->Locale) || ($this->owner->has_extension(FluentFilteredExtension::class) && $this->owner->isAvailableInLocale(Locale::getByLocale($this->owner->Locale)))));
         }
     }
     

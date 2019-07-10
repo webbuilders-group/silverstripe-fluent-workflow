@@ -1,15 +1,11 @@
 <?php
-
 namespace WebbuildersGroup\FluentWorkflow\DataObjects;
 
-use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Member;
-use SilverStripe\Versioned\Versioned;
 use SilverStripe\Core\Injector\Injector;
-use TractorCow\Fluent\State\FluentState;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Versioned\Versioned;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance;
-use Symbiote\AdvancedWorkflow\DataObjects\WorkflowDefinition;
-use Symbiote\AdvancedWorkflow\DataObjects\WorkflowActionInstance;
+use TractorCow\Fluent\State\FluentState;
 use WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowInstanceExtension;
 
 class FluentWorkflowInstance extends WorkflowInstance
