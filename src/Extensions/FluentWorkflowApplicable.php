@@ -95,4 +95,17 @@ class FluentWorkflowApplicable extends WorkflowApplicable
             $tab->push($log);
         }
     }
+    
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        
+        if (!$this->owner->existsInLocale()) {
+            if (Locale::getCurrentLocale()->Locale === "en_US") {
+                $this->owner->WorkflowDefinitionID = 0;
+            } else {
+                $this->owner->FrWorkflowDefinition = 0;
+            }
+        }
+    }
 }
