@@ -3,15 +3,15 @@
 namespace WebbuildersGroup\FluentWorkflow\Services;
 
 use SilverStripe\Core\Convert;
-use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
-use TractorCow\Fluent\State\FluentState;
-use Symbiote\AdvancedWorkflow\Services\WorkflowService;
-use Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance;
-use Symbiote\AdvancedWorkflow\Extensions\WorkflowApplicable;
+use Symbiote\AdvancedWorkflow\DataObjects\WorkflowAction;
 use Symbiote\AdvancedWorkflow\DataObjects\WorkflowDefinition;
+use Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance;
 use Symbiote\AdvancedWorkflow\Extensions\FileWorkflowApplicable;
+use Symbiote\AdvancedWorkflow\Extensions\WorkflowApplicable;
 use Symbiote\AdvancedWorkflow\Services\ExistingWorkflowException;
+use Symbiote\AdvancedWorkflow\Services\WorkflowService;
+use TractorCow\Fluent\State\FluentState;
 use WebbuildersGroup\FluentWorkflow\DataObjects\FluentWorkflowInstance;
 use WebbuildersGroup\FluentWorkflow\Extensions\FluentWorkflowApplicable;
 
@@ -62,27 +62,25 @@ class FluentWorkflowService extends WorkflowService
     public function getWorkflowFor($item, $includeComplete = false)
     {
         $locale = FluentState::singleton()->getLocale();
-
+        
         $id = $item;
-
+        
         if ($item instanceof WorkflowAction) {
             $id = $item->WorkflowID;
             return DataObject::get_by_id(WorkflowInstance::class, $id);
-        } elseif (
-            is_object($item) && ($item->hasExtension(FluentWorkflowApplicable::class)
-                || $item->hasExtension(FileWorkflowApplicable::class))
-        ) {
+        } else if (is_object($item) && ($item->hasExtension(FluentWorkflowApplicable::class) || $item->hasExtension(FileWorkflowApplicable::class))) {
             $filter = sprintf(
                 '"TargetClass" = \'%s\' AND "TargetID" = %d AND "TargetLocale" = \'%s\' ',
-                Convert::raw2sql(ClassInfo::baseDataClass($item)),
+                Convert::raw2sql(DataObject::getSchema()->baseDataClass($item)),
                 $item->ID,
                 $locale
             );
+            
             $complete = $includeComplete ? 'OR "WorkflowStatus" = \'Complete\' ' : '';
             $do = FluentWorkflowInstance::get()->where(
                 $filter . ' AND ("WorkflowStatus" = \'Active\' OR "WorkflowStatus"=\'Paused\' ' . $complete . ')'
             )->first();
-
+            
             return $do;
         }
     }

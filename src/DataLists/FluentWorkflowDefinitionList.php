@@ -10,6 +10,8 @@ use SilverStripe\ORM\SS_List;
 use SilverStripe\ORM\Queries\SQLDelete;
 use SilverStripe\ORM\Queries\SQLSelect;
 use TractorCow\Fluent\State\FluentState;
+use BadMethodCallException;
+use InvalidArgumentException;
 
 class FluentWorkflowDefinitionList extends ManyManyList
 {

@@ -2,15 +2,13 @@
 
 namespace WebbuildersGroup\FluentWorkflow\Services;
 
-use Exception;
-use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Security;
-use TractorCow\Fluent\Model\Locale;
-use TractorCow\Fluent\State\FluentState;
+use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
-use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
+use TractorCow\Fluent\Model\Locale;
+use TractorCow\Fluent\State\FluentState;
+use Exception;
 
 class FluentQueuedJobService extends QueuedJobService
 {
