@@ -52,7 +52,7 @@ class FluentWorkflowEmbargoExpiryExtension extends WorkflowEmbargoExpiryExtensio
      */
     public function onBeforeWrite()
     {
-        if (!$this->owner->existsInLocale()) {
+        if (Versioned::get_stage() === Versioned::DRAFT && !$this->owner->existsInLocale()) {
             $this->owner->PublishJobID = 0;
             $this->owner->UnPublishJobID = 0;
         }
