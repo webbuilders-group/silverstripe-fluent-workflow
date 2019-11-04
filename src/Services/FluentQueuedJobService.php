@@ -1,12 +1,10 @@
 <?php
-
 namespace WebbuildersGroup\FluentWorkflow\Services;
 
 use SilverStripe\ORM\DataObject;
 use Symbiote\QueuedJobs\DataObjects\QueuedJobDescriptor;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
-use TractorCow\Fluent\Model\Locale;
 use TractorCow\Fluent\State\FluentState;
 use Exception;
 
@@ -14,7 +12,7 @@ class FluentQueuedJobService extends QueuedJobService
 {
     public function queueJob(QueuedJob $job, $startAfter = null, $userId = null, $queueName = null)
     {
-        $job->__set('Locale', Locale::getCurrentLocale()->Locale);
+        $job->__set('Locale', FluentState::singleton()->getLocale());
         return parent::queueJob($job, $startAfter, $userId, $queueName);
     }
 
