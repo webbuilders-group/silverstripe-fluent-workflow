@@ -32,7 +32,7 @@ class FluentWorkflowEmbargoExpiryExtension extends WorkflowEmbargoExpiryExtensio
         
         //Update the publish date field to have the icon
         $field = $fields->dataFieldByName('DesiredPublishDate');
-        if (!$field->hasClass('fluent__localised-field')) {
+        if ($field && !$field->hasClass('fluent__localised-field')) {
             $field
                 ->setTitle(DBField::create_field('HTMLFragment', $tooltip . $field->Title()))
                 ->addExtraClass('fluent__localised-field');
@@ -46,7 +46,7 @@ class FluentWorkflowEmbargoExpiryExtension extends WorkflowEmbargoExpiryExtensio
         
         //Update the unpublish date field to have the icon
         $field = $fields->dataFieldByName('DesiredUnPublishDate');
-        if (!$field->hasClass('fluent__localised-field')) {
+        if ($field && !$field->hasClass('fluent__localised-field')) {
             $field
                 ->setTitle(DBField::create_field('HTMLFragment', $tooltip . $field->Title()))
                 ->addExtraClass('fluent__localised-field');
