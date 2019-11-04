@@ -3,8 +3,9 @@ namespace WebbuildersGroup\FluentWorkflow\Extensions;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\FieldType\DBField;
-use Symbiote\AdvancedWorkflow\Extensions\WorkflowEmbargoExpiryExtension;
 use SilverStripe\ORM\FieldType\DBHTMLVarchar;
+use SilverStripe\Versioned\Versioned;
+use Symbiote\AdvancedWorkflow\Extensions\WorkflowEmbargoExpiryExtension;
 
 class FluentWorkflowEmbargoExpiryExtension extends WorkflowEmbargoExpiryExtension
 {
